@@ -50,24 +50,21 @@ files.
 
 <img src='images/auto-captioner-v1.18.0.png' alt='Auto-captioner screenshot' width='100%'>
 
-In addition to manual tagging, you can automatically generate captions or tags
-for your images inside TagGUI.
-GPU generation requires a compatible NVIDIA GPU, and CPU generation is also
-supported.
+In addition to manual tagging, you can automatically generate captions for
+your images inside TagGUI through an OpenAI-compatible multimodal API.
+This lets you use your own backend of choice, such as `llama.cpp`,
+`koboldcpp`, or `LM Studio`, instead of downloading and running captioning
+models inside the app itself.
 
-To use the feature, select the images you want to caption in the image list,
-then select the captioning model you want to use in the Auto-Captioner pane.
-If you have a local directory containing previously downloaded models, you can
-set it in `File` -> `Settings` to include the models in the model list.
-Click the `Start Auto-Captioning` button to start captioning.
-You can select multiple images to batch generate captions for all of them.
-It can take up to several minutes to download and load a model when you first
-use it, but subsequent generations will be much faster.
+To use the feature, open `File` -> `Settings` and configure the API base URL,
+API key (if your backend needs one), and request timeout.
+Then select the images you want to caption in the image list, enter the remote
+model name in the Auto-Captioner pane, and click `Start Auto-Captioning`.
+You can select multiple images to batch caption them all at once.
 
 ### Captioning parameters
 
 `Prompt`: Instructions given to the captioning model.
-Prompt formats are handled automatically based on the selected model.
 You can use the following template variables to dynamically insert information
 about each image into the prompt:
 
@@ -86,14 +83,14 @@ image before the prompt is sent to the model.
 default) will be removed from the generated captions.
 
 `Discourage from caption`: Words or phrases that should not be present in the
-generated captions.
+generated captions. These are sent as instructions to the remote model.
 You can separate multiple words or phrases with commas (`,`).
 For example, you can put `appears,seems,possibly` to prevent the model from
 using an uncertain tone in the captions.
-The words may still be generated due to limitations related to tokenization.
+The words may still be generated depending on the backend and model.
 
 `Include in caption`: Words or phrases that should be present somewhere in the
-generated captions.
+generated captions. These are sent as instructions to the remote model.
 You can separate multiple words or phrases with commas (`,`).
 You can also allow the captioning model to choose from a group of words or
 phrases by separating them with `|`.
@@ -102,11 +99,9 @@ generate captions that contain the word `cat` and either `orange`, `white`,
 or `black`.
 It is not guaranteed that all of your specifications will be met.
 
-`Tags to exclude` (WD Tagger models): Tags that should not be generated,
-separated by commas.
-
-Many of the other generation parameters are described in the
-[Hugging Face documentation](https://huggingface.co/docs/transformers/main/en/main_classes/text_generation#transformers.GenerationConfig).
+The advanced sampling settings are forwarded to the OpenAI-compatible backend
+when possible. Support varies by server implementation, so some parameters may
+be ignored by backends that do not recognize them.
 
 ## Advanced Image List Filtering
 
